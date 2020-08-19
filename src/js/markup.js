@@ -1,28 +1,28 @@
-import imagesTpl from '../templates/search-images.hbs'
-import { refs } from './refs'
-import api from './apiService';
-// import apiService from './apiService'
-// console.log(refs.gallery);
-// console.log(imagesTpl);
+import imagesTpl from '../templates/search-images.hbs';
+import { refs } from './refs';
+import { fetchLoadImages } from './fetch-cards';
+import { activateLoadBtn } from './load-btn';
+import { pnotifyNotice } from './pnotify';
 
-export function createImagesMarkup(image){
-    refs.loadMoreBtn.classList.remove('is-hidden')
-    refs.gallery.innerHTML = imagesTpl(image)
-
-
-    refs.loadMoreBtn.addEventListener('click', imageMarkupCompletion)
-
+export function createImagesMarkup(image) {
+  if (image.length === 0) {
+    pnotifyNotice();
+  } else {
+    activateLoadBtn();
+    refs.gallery.innerHTML = imagesTpl(image);
+    refs.loadMoreBtn.addEventListener('click', fetchLoadImages);
+  }
 }
 
-function imageMarkupCompletion(){
-api.nextPage()
-api.fetchImages().then(data=> data.hits).then(image => refs.gallery.insertAdjacentHTML('beforeend', imagesTpl(image)))
-window.scrollTo({
-    top:document.documentElement.offsetHeight,
-    behavior:'smooth'
-})
+export function imageMarkupCompletion(image) {
+  refs.gallery.insertAdjacentHTML('beforeend', imagesTpl(image));
+
+  window.scrollTo({
+    top: document.documentElement.scrollHeight,
+    behavior: 'smooth',
+  });
 }
 
-export function clearMarkup(){
-    refs.gallery.innerHTML =''
+export function clearMarkup() {
+  refs.gallery.innerHTML = '';
 }

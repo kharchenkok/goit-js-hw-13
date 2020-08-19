@@ -1,10 +1,12 @@
 import api from './apiService';
-import { createImagesMarkup } from './markup';
+import { createImagesMarkup, imageMarkupCompletion } from './markup';
 
-export function fetchImagesCards(value){
+export function fetchImagesCards(value) {
+  api.querry = value;
+  api.fetchImages().then(image => createImagesMarkup(image));
+}
 
-    api.querry = value
-      api.fetchImages().then(data=> data.hits).then(image => createImagesMarkup(image))
-        
-    
-    }
+export function fetchLoadImages() {
+  api.nextPage();
+  api.fetchImages().then(image => imageMarkupCompletion(image));
+}
