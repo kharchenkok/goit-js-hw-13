@@ -1,8 +1,8 @@
 import './styles.css';
 import api from './js/apiService';
-import { fetchImagesCards } from './js/fetch-cards';
+import { fetchImagesCards, fetchLoadImages } from './js/fetch-cards';
 import { refs } from './js/refs';
-import { clearMarkup } from './js/markup';
+import { updateMarkup } from './js/markup';
 import { hideLoadBtn } from './js/load-btn';
 import { openModal } from './js/modal';
 
@@ -10,7 +10,7 @@ const searchItems = function (event) {
   event.preventDefault();
   hideLoadBtn();
   let inputValue = event.target.elements.query.value;
-  clearMarkup();
+  updateMarkup();
   api.reset();
   fetchImagesCards(inputValue);
   event.target.reset();
@@ -18,3 +18,4 @@ const searchItems = function (event) {
 };
 
 refs.searchForm.addEventListener('submit', searchItems);
+refs.loadMoreBtn.addEventListener('click', fetchLoadImages)
