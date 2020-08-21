@@ -6,23 +6,26 @@ import { pnotifyError, pnotifyNotice } from './pnotify';
 import api from './apiService';
 
 export function createImagesMarkup(image) {
+  
+  image.length===0 ? pnotifyError() : letMarkup(image)
+  
+}
+
+function letMarkup(image){
   let totalImgNumb = api.totalHits;
-  if (image.length === 0) {
-    pnotifyError();
-  } else if (image.length < api.cardsPerPage) {
+  if (image.length < api.cardsPerPage) {
     pnotifyNotice(totalImgNumb);
     refs.gallery.innerHTML = imagesTpl(image);
-  } else {
+    } else {
     activateLoadBtn();
     pnotifyNotice(totalImgNumb);
     refs.gallery.innerHTML = imagesTpl(image);
     refs.loadMoreBtn.addEventListener('click', fetchLoadImages);
-  }
+    }
 }
 
 export function imageMarkupCompletion(image) {
   refs.gallery.insertAdjacentHTML('beforeend', imagesTpl(image));
-
   window.scrollTo({
     top: document.documentElement.scrollHeight,
     behavior: 'smooth',
